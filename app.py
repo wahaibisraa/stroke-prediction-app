@@ -1,0 +1,125 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "7f033860-9b64-4ab6-a8ba-66f12ef2acf7",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Defaulting to user installation because normal site-packages is not writeable\n",
+      "Requirement already satisfied: Flask in c:\\programdata\\anaconda3\\lib\\site-packages (3.0.3)\n",
+      "Requirement already satisfied: pandas in c:\\programdata\\anaconda3\\lib\\site-packages (2.2.2)\n",
+      "Requirement already satisfied: scikit-learn in c:\\programdata\\anaconda3\\lib\\site-packages (1.4.2)\n",
+      "Requirement already satisfied: numpy in c:\\programdata\\anaconda3\\lib\\site-packages (1.26.4)\n",
+      "Requirement already satisfied: Werkzeug>=3.0.0 in c:\\programdata\\anaconda3\\lib\\site-packages (from Flask) (3.0.3)\n",
+      "Requirement already satisfied: Jinja2>=3.1.2 in c:\\programdata\\anaconda3\\lib\\site-packages (from Flask) (3.1.4)\n",
+      "Requirement already satisfied: itsdangerous>=2.1.2 in c:\\programdata\\anaconda3\\lib\\site-packages (from Flask) (2.2.0)\n",
+      "Requirement already satisfied: click>=8.1.3 in c:\\programdata\\anaconda3\\lib\\site-packages (from Flask) (8.1.7)\n",
+      "Requirement already satisfied: blinker>=1.6.2 in c:\\programdata\\anaconda3\\lib\\site-packages (from Flask) (1.6.2)\n",
+      "Requirement already satisfied: python-dateutil>=2.8.2 in c:\\programdata\\anaconda3\\lib\\site-packages (from pandas) (2.9.0.post0)\n",
+      "Requirement already satisfied: pytz>=2020.1 in c:\\programdata\\anaconda3\\lib\\site-packages (from pandas) (2024.1)\n",
+      "Requirement already satisfied: tzdata>=2022.7 in c:\\programdata\\anaconda3\\lib\\site-packages (from pandas) (2023.3)\n",
+      "Requirement already satisfied: scipy>=1.6.0 in c:\\programdata\\anaconda3\\lib\\site-packages (from scikit-learn) (1.13.1)\n",
+      "Requirement already satisfied: joblib>=1.2.0 in c:\\programdata\\anaconda3\\lib\\site-packages (from scikit-learn) (1.4.2)\n",
+      "Requirement already satisfied: threadpoolctl>=2.0.0 in c:\\programdata\\anaconda3\\lib\\site-packages (from scikit-learn) (2.2.0)\n",
+      "Requirement already satisfied: colorama in c:\\programdata\\anaconda3\\lib\\site-packages (from click>=8.1.3->Flask) (0.4.6)\n",
+      "Requirement already satisfied: MarkupSafe>=2.0 in c:\\programdata\\anaconda3\\lib\\site-packages (from Jinja2>=3.1.2->Flask) (2.1.3)\n",
+      "Requirement already satisfied: six>=1.5 in c:\\programdata\\anaconda3\\lib\\site-packages (from python-dateutil>=2.8.2->pandas) (1.16.0)\n",
+      "Note: you may need to restart the kernel to use updated packages.\n"
+     ]
+    }
+   ],
+   "source": [
+    "pip install Flask pandas scikit-learn numpy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c3b29ba0-7c40-4a9f-99aa-4c6abff148a2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from flask import Flask, request, jsonify\n",
+    "import pandas as pd\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "from sklearn.ensemble import RandomForestClassifier\n",
+    "import numpy as np\n",
+    "import pickle\n",
+    "\n",
+    "app = Flask(__name__)\n",
+    "\n",
+    "# Dummy data preparation and model training for demonstration\n",
+    "data = pd.DataFrame({\n",
+    "    'age': [65, 45, 25],\n",
+    "    'hypertension': [1, 0, 1],\n",
+    "    'heart_disease': [0, 1, 0],\n",
+    "    'avg_glucose_level': [120.5, 80.2, 90.5],\n",
+    "    'bmi': [35.0, 25.0, np.nan]\n",
+    "})\n",
+    "data['bmi'] = data['bmi'].fillna(data['bmi'].mean())\n",
+    "features = ['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']\n",
+    "\n",
+    "# Scale features and fit model\n",
+    "scaler = StandardScaler()\n",
+    "data_scaled = scaler.fit_transform(data[features])\n",
+    "model = RandomForestClassifier()\n",
+    "model.fit(data_scaled, [0, 1, 0])\n",
+    "\n",
+    "@app.route('/predict', methods=['POST'])\n",
+    "def predict():\n",
+    "    data = request.get_json()\n",
+    "\n",
+    "    try:\n",
+    "        # Extract and convert input data\n",
+    "        input_data = [\n",
+    "            float(data['age']),\n",
+    "            int(data['hypertension']),\n",
+    "            int(data['heart_disease']),\n",
+    "            float(data['avg_glucose_level']),\n",
+    "            float(data['bmi'])\n",
+    "        ]\n",
+    "        # Scale input data\n",
+    "        input_data_scaled = scaler.transform([input_data])\n",
+    "\n",
+    "        # Predict\n",
+    "        prediction = model.predict(input_data_scaled)\n",
+    "        result = \"High risk of stroke\" if prediction[0] == 1 else \"Low risk of stroke\"\n",
+    "\n",
+    "        return jsonify({\"prediction\": result})\n",
+    "    except Exception as e:\n",
+    "        return jsonify({\"error\": str(e)}), 400\n",
+    "\n",
+    "if __name__ == \"__main__\":\n",
+    "    app.run(debug=True)\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

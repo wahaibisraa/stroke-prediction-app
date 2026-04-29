@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prediction</title>
+</head>
+<body>
+    <h1>Stroke Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="gender">Gender (Male=0, Female=1): </label>
+        <input type="text" id="gender" name="gender"><br><br>
+        <!-- Add more input fields for other features -->
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>

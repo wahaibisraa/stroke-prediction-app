@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prediction</title>
+</head>
+<body>
+    <h1>Stroke Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="gender">Gender (Male=0, Female=1): </label>
+        <input type="text" id="gender" name="gender"><br><br>
+
+        <label for="age">Age: </label>
+        <input type="text" id="age" name="age"><br><br>
+
+        <label for="hypertension">Hypertension (0=No, 1=Yes): </label>
+        <input type="text" id="hypertension" name="hypertension"><br><br>
+
+        <label for="heart_disease">Heart Disease (0=No, 1=Yes): </label>
+        <input type="text" id="heart_disease" name="heart_disease"><br><br>
+
+        <label for="ever_married">Ever Married (0=No, 1=Yes): </label>
+        <input type="text" id="ever_married" name="ever_married"><br><br>
+
+        <label for="work_type">Work Type (0=Private, 1=Self-employed, 2=Govt_job, 3=Children, 4=Never_worked): </label>
+        <input type="text" id="work_type" name="work_type"><br><br>
+
+        <label for="Residence_type">Residence Type (0=Urban, 1=Rural): </label>
+        <input type="text" id="Residence_type" name="Residence_type"><br><br>
+
+        <label for="avg_glucose_level">Average Glucose Level: </label>
+        <input type="text" id="avg_glucose_level" name="avg_glucose_level"><br><br>
+
+        <label for="bmi">BMI: </label>
+        <input type="text" id="bmi" name="bmi"><br><br>
+
+        <label for="smoking_status">Smoking Status (0=Unknown, 1=Never smoked, 2=formerly smoked, 3=smokes): </label>
+        <input type="text" id="smoking_status" name="smoking_status"><br><br>
+
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>
